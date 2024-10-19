@@ -11,12 +11,11 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="LimelightColorDetection", group="Linear OpMode")
 public class LimelightColorDetection extends OpMode {
 
-    private DcMotor frontLeftMotor;
-    private DcMotor frontRightMotor;
-    private DcMotor backLeftMotor;
-    private DcMotor backRightMotor;
+    private DcMotor frontLeft;
+    private DcMotor frontRight;
+    private DcMotor backLeft;
+    private DcMotor backRight;
     private Limelight3A limelight;
-    private DcMotor frontLeft, frontRight, backLeft, backRight;
     private int activePipeline = 0;
 
     @Override
@@ -72,7 +71,7 @@ public class LimelightColorDetection extends OpMode {
             double drive = gamepad1.left_stick_y; // Forward/backward
             double strafe = -gamepad1.left_stick_x; // Left/right
             double rotate;
-            
+
 
 
             // Switch between color detection pipelines
@@ -146,5 +145,4 @@ public class LimelightColorDetection extends OpMode {
         }
     }
 }
-
 

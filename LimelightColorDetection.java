@@ -9,7 +9,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="LimelightColorDetection", group="Linear OpMode")
-public class LimelightColorDetection extends OpMode {
+public class limelight extends OpMode {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;
@@ -104,7 +104,7 @@ public class LimelightColorDetection extends OpMode {
             if (gamepad1.a && hasTarget) {
                 rotate = Range.clip(targetX / 150, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
             } else {
-                rotate = gamepad1.right_stick_x; // Rotation
+                rotate = -gamepad1.right_stick_x; // Rotation
             }
 
 
@@ -145,4 +145,3 @@ public class LimelightColorDetection extends OpMode {
         }
     }
 }
-

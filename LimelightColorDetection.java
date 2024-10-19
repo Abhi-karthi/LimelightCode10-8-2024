@@ -71,7 +71,8 @@ public class LimelightColorDetection extends OpMode {
             // Mecanum drive variables
             double drive = gamepad1.left_stick_y; // Forward/backward
             double strafe = -gamepad1.left_stick_x; // Left/right
-            double rotate = gamepad1.right_stick_x; // Rotation
+            double rotate;
+            
 
 
             // Switch between color detection pipelines
@@ -104,7 +105,7 @@ public class LimelightColorDetection extends OpMode {
             if (gamepad1.a && hasTarget) {
                 rotate = Range.clip(targetX / 150, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
             } else {
-                rotate = 0;
+                rotate = gamepad1.right_stick_x; // Rotation
             }
 
 

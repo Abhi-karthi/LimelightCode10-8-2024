@@ -69,8 +69,8 @@ public class LimelightColorDetection extends OpMode {
         } else {
             // Get Limelight data
             // Mecanum drive variables
-            double drive = -gamepad1.left_stick_y; // Forward/backward
-            double strafe = gamepad1.left_stick_x; // Left/right
+            double drive = gamepad1.left_stick_y; // Forward/backward
+            double strafe = -gamepad1.left_stick_x; // Left/right
             double rotate = gamepad1.right_stick_x; // Rotation
 
 
@@ -134,9 +134,16 @@ public class LimelightColorDetection extends OpMode {
             telemetry.addData("Back Left Power", backLeftPower);
             telemetry.addData("Back Right Power", backRightPower);
             telemetry.addData("Distance", distance);
-            telemetry.addData("Pipeline", activePipeline);
+            if (activePipeline == 0) {
+                telemetry.addData("Pipeline", "Yellow");
+            } else if (activePipeline == 1) {
+                telemetry.addData("Pipeline", "Blue");
+            } else if (activePipeline == 2) {
+                telemetry.addData("Pipeline", "Red");
+            }
             telemetry.update();
         }
     }
 }
+
 

@@ -9,7 +9,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="LimelightColorDetection", group="Linear OpMode")
-public class limelight extends OpMode {
+public class LimelightColorDetection extends OpMode {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;
@@ -134,6 +134,7 @@ public class limelight extends OpMode {
             telemetry.addData("Back Left Power", backLeftPower);
             telemetry.addData("Back Right Power", backRightPower);
             telemetry.addData("Distance", distance);
+            telemetry.addData("Target", hasTarget);
             if (activePipeline == 0) {
                 telemetry.addData("Pipeline", "Yellow");
             } else if (activePipeline == 1) {

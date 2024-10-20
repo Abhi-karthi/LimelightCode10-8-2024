@@ -59,11 +59,11 @@ public class LimelightColorDetection extends OpMode {
 
     public void loop() {
         if (!checkTeamCodeRan) { // Until you press the right or left bumper (too select your team) the rest of the code won't run. Once they are pressed, they an be used for other mechanisms.
-            if (gamepad1.left_bumper) {
+            if (gamepad1.left_bumper) { // Left bumper is red
                 team = false;
                 checkTeamCodeRan = true;
             }
-            if (gamepad1.right_bumper) {
+            if (gamepad1.right_bumper) { // Right bumper is blue
                 team = true;
                 checkTeamCodeRan = true;
             }
@@ -72,16 +72,17 @@ public class LimelightColorDetection extends OpMode {
             // Mecanum drive variables
             double drive = gamepad1.left_stick_y; // Forward/backward
             double strafe = -gamepad1.left_stick_x; // Left/right
-            double rotate;
+            double rotate = 0;
 
 
 
             // Switch between color detection pipelines
-            if (gamepad1.y) {
+            if (gamepad1.dpad_left) {
                 activePipeline = 0; // Yellow
-            } else if (gamepad1.a) {
+            } else if (gamepad1.dpad_right) { // Team Color
                 if (team) {
                     activePipeline = 1; // Blue
+
                 } else {
                     activePipeline = 2; // Red
                 }
@@ -105,15 +106,18 @@ public class LimelightColorDetection extends OpMode {
                 telemetry.addData("Target X", targetX);
                 telemetry.addData("Target Area", targetArea);
             } else {
-                telemetry.addData("Limelight", "No Targets");
                 hasTarget = false;
             }
             double distance = calculateDistanceFromArea(targetArea);
-            if (gamepad1.a && hasTarget) {
+            if (gamepad1.dpad_right && hasTarget ) {
                 telemetry.addData("Rotation without scale", -Range.clip(targetX / 150, -1.0, 1.0));
                 telemetry.addData("Rotation with scale", scale * -Range.clip(targetX / 150, -1.0, 1.0));
                 telemetry.addData("Scale", scale);
                 rotate = scale * -Range.clip(targetX / 150, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
+            } else if (gamepad1.dpad_left && hasTarget) {
+                telemetry.addData("Rotation without scale", -Range.clip(targetX / 150, -1.0, 1.0));
+                telemetry.addData("Rotation with scale", scale * -Range.clip(targetX / 150, -1.0, 1.0));
+                telemetry.addData("Scale", scale);
             } else {
                 rotate = -gamepad1.right_stick_x; // Rotation
             }

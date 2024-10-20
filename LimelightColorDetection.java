@@ -58,14 +58,14 @@ public class LimelightColorDetection extends OpMode {
     @Override
 
     public void loop() {
-        if (!checkTeamCodeRan) {
+        if (!checkTeamCodeRan) { // Until you press the right or left bumper (too select your team) the rest of the code won't run. Once they are pressed, they an be used for other mechanisms.
             if (gamepad1.left_bumper) {
                 team = false;
                 checkTeamCodeRan = true;
             }
             if (gamepad1.right_bumper) {
                 team = true;
-                checkTeamCodeRan = false;
+                checkTeamCodeRan = true;
             }
         } else {
             // Get Limelight data

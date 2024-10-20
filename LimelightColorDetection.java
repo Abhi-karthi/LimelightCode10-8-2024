@@ -47,7 +47,6 @@ public class LimelightColorDetection extends OpMode {
 
     boolean checkTeamCodeRan = false; // Boolean to check if the code to check the team has ran
     boolean team = false; // false is red and true is blue
-    double scale;
     public double calculateDistanceFromArea(double area) {
         // Assuming a basic inverse relationship between area and distance
         if (area == 0) {
@@ -96,11 +95,6 @@ public class LimelightColorDetection extends OpMode {
 
             if (result != null && result.isValid()) {
                 targetX = result.getTx(); // Horizontal offset from target
-                if (targetX >= 0) {
-                    scale = targetX / 4;
-                } else {
-                    scale = targetX / -4;
-                }
                 targetArea = result.getTa(); // Area of the target (useful for distance)
                 hasTarget = true;
                 telemetry.addData("Target X", targetX);
@@ -110,15 +104,9 @@ public class LimelightColorDetection extends OpMode {
             }
             double distance = calculateDistanceFromArea(targetArea);
             if (gamepad1.dpad_right && hasTarget ) {
-                telemetry.addData("Rotation without scale", -Range.clip(targetX / 150, -1.0, 1.0));
-                telemetry.addData("Rotation with scale", scale * -Range.clip(targetX / 150, -1.0, 1.0));
-                telemetry.addData("Scale", scale);
-                rotate = scale * -Range.clip(targetX / 150, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
+                rotate = -Range.clip(targetX / 50, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
             } else if (gamepad1.dpad_left && hasTarget) {
-                telemetry.addData("Rotation without scale", -Range.clip(targetX / 150, -1.0, 1.0));
-                telemetry.addData("Rotation with scale", scale * -Range.clip(targetX / 150, -1.0, 1.0));
-                telemetry.addData("Scale", scale);
-                rotate = scale * -Range.clip(targetX / 150, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
+                rotate = -Range.clip(targetX / 50, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
 
             } else {
                 rotate = -gamepad1.right_stick_x; // Rotation

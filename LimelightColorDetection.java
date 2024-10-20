@@ -97,9 +97,9 @@ public class LimelightColorDetection extends OpMode {
             if (result != null && result.isValid()) {
                 targetX = result.getTx(); // Horizontal offset from target
                 if (targetX >= 0) {
-                    scale = targetX / 4;
+                    scale = targetX / 5;
                 } else {
-                    scale = targetX / -4;
+                    scale = targetX / -5;
                 }
                 targetArea = result.getTa(); // Area of the target (useful for distance)
                 hasTarget = true;

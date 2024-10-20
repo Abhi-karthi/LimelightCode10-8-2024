@@ -118,6 +118,8 @@ public class LimelightColorDetection extends OpMode {
                 telemetry.addData("Rotation without scale", -Range.clip(targetX / 150, -1.0, 1.0));
                 telemetry.addData("Rotation with scale", scale * -Range.clip(targetX / 150, -1.0, 1.0));
                 telemetry.addData("Scale", scale);
+                rotate = scale * -Range.clip(targetX / 150, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
+
             } else {
                 rotate = -gamepad1.right_stick_x; // Rotation
             }

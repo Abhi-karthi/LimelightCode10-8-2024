@@ -48,14 +48,6 @@ public class LimelightColorDetection extends OpMode {
     boolean team = false; // false is red and true is blue
     double scale;
 
-    public double calculateDistanceFromArea(double area, double angle) {
-        // Assuming a basic inverse relationship between area and distance
-        if (area == 0) {
-            return -1; // No target detected, return a large distance
-        }
-        return Math.sqrt(area); // Beta, didn't test and probably wont work.
-    }
-
     @Override
 
     public void loop() {
@@ -110,7 +102,6 @@ public class LimelightColorDetection extends OpMode {
             } else {
                 hasTarget = false;
             }
-            double distance = calculateDistanceFromArea(targetArea, targetX);
             if (gamepad1.dpad_right && hasTarget) {
                 telemetry.addData("Rotation without scale", -Range.clip(targetX / 150, -1.0, 1.0));
                 telemetry.addData("Rotation with scale", scale * -Range.clip(targetX / 150, -1.0, 1.0));
@@ -183,7 +174,6 @@ public class LimelightColorDetection extends OpMode {
             telemetry.addData("Front Right Power", frontRightPower);
             telemetry.addData("Back Left Power", backLeftPower);
             telemetry.addData("Back Right Power", backRightPower);
-            telemetry.addData("Distance", distance);
             telemetry.addData("Target", hasTarget);
             telemetry.addData("Status", "Running");
             if (activePipeline == 0) {

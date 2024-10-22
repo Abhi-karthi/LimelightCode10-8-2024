@@ -1,6 +1,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,7 +10,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="LimelightColorDetection", group="Linear OpMode")
-public class LimelightColorDetection extends OpMode {
+public class LimelightColorDetection extends LinearOpMode {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;
@@ -19,7 +20,7 @@ public class LimelightColorDetection extends OpMode {
     private int activePipeline = 0;
 
     @Override
-    public void init() {
+    public void runOpMode() {
         // Initialize the motors
         // Initialize the motors
         frontLeft = hardwareMap.get(DcMotor.class, "front_left_motor");
@@ -40,32 +41,41 @@ public class LimelightColorDetection extends OpMode {
         limelight.pipelineSwitch(activePipeline);
         telemetry.addData("Status", "Initialized");
 
-    }
+        // Variable Initialization
 
-    boolean checkTeamCodeRan = false; // Boolean to check if the code to check the team has ran
-    boolean team = false; // false is red and true is blue
-    double scale;
+        boolean team = false; // false is red and true is blue
+        boolean checkTeamCodeRan = false; // Boolean to check if the code to check the team has ran double
+        double scale = 0;
+        double drive = gamepad1.left_stick_y; // Forward/backward
+        double strafe = -gamepad1.left_stick_x; // Left/right
+        double rotate = -gamepad1.right_stick_x; // Rotation
+        double targetY = 0;
+        double targetArea = 0;
+        boolean hasTarget = false;
+        double frontLeftPower = drive + strafe + rotate;
+        double frontRightPower = drive - strafe - rotate;
+        double backLeftPower = drive - strafe + rotate;
+        double backRightPower = drive + strafe - rotate;
 
-    @Override
-
-    public void loop() {
-        if (!checkTeamCodeRan) { // Until you press the right or left bumper (to select your team) the rest of the code won't run. Once they are pressed, they an be used for other mechanisms.
-            if (gamepad1.left_bumper) { // Left bumper is red
-                team = false;
-                checkTeamCodeRan = true;
+        while (opModeInInit()) {
+            if (gamepad1.b) {
+                team = false; // Left bumper is red
+                telemetry.addData("Team","Red");
+            } else if (gamepad1.x) {
+                team = true; // Right bumper is blue
+                telemetry.addData("Team","Blue");
             }
-            if (gamepad1.right_bumper) { // Right bumper is blue
-                team = true;
-                checkTeamCodeRan = true;
-            }
-            telemetry.addData("Status", "Started, team color pending");
-        } else {
+        }
+
+
+
+        waitForStart();
+        while (opModeIsActive()) {
             // Get Limelight data
             // Mecanum drive variables
-            double drive = gamepad1.left_stick_y; // Forward/backward
-            double strafe = -gamepad1.left_stick_x; // Left/right
-            double rotate = 0;
-            double powerForwardForDistance = 0;
+            drive = gamepad1.left_stick_y; // Forward/backward
+            strafe = -gamepad1.left_stick_x; // Left/right
+            rotate = -gamepad1.right_stick_x; // Rotation
 
 
             // Switch between color detection pipelines
@@ -82,9 +92,9 @@ public class LimelightColorDetection extends OpMode {
             limelight.pipelineSwitch(activePipeline);
 
             LLResult result = limelight.getLatestResult();
-            double targetY = 0;
-            double targetArea = 0;
-            boolean hasTarget = false;
+            targetY = 0;
+            targetArea = 0;
+            hasTarget = false;
 
             if (result != null && result.isValid()) {
                 targetY = result.getTy(); // Horizontal offset from target
@@ -100,7 +110,7 @@ public class LimelightColorDetection extends OpMode {
             } else {
                 hasTarget = false;
             }
-            if (gamepad1.dpad_right && hasTarget) {
+            if ((gamepad1.dpad_right || gamepad1.dpad_left) && hasTarget) {
                 telemetry.addData("Rotation without scale", -Range.clip(targetY / 150, -1.0, 1.0));
                 telemetry.addData("Rotation with scale", scale * -Range.clip(targetY / 150, -1.0, 1.0));
                 telemetry.addData("Scale", scale);
@@ -121,36 +131,13 @@ public class LimelightColorDetection extends OpMode {
                         drive = 0.25;
                     }
                 }
-            } else if (gamepad1.dpad_left && hasTarget) {
-                telemetry.addData("Rotation without scale", -Range.clip(targetY / 150, -1.0, 1.0));
-                telemetry.addData("Rotation with scale", scale * -Range.clip(targetY / 150, -1.0, 1.0));
-                telemetry.addData("Scale", scale);
-
-                rotate = scale * -Range.clip(targetY / 150, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
-                if (targetArea < 1.25) {
-                    if (targetArea < 0.4) {
-                        drive = -1;
-                    } else if (targetArea < 0.8) {
-                        drive = -.5;
-                    } else {
-                        drive = -0.25;
-                    }
-                } else if (targetArea > 2.5) {
-                    if (targetArea > 3) {
-                        drive = .5;
-                    } else {
-                        drive = 0.25;
-                    }
-                }
-            } else {
-                rotate = -gamepad1.right_stick_x; // Rotation
             }
 
 
-            double frontLeftPower = drive + strafe + rotate;
-            double frontRightPower = drive - strafe - rotate;
-            double backLeftPower = drive - strafe + rotate;
-            double backRightPower = drive + strafe - rotate;
+            frontLeftPower = drive + strafe + rotate;
+            frontRightPower = drive - strafe - rotate;
+            backLeftPower = drive - strafe + rotate;
+            backRightPower = drive + strafe - rotate;
 
 
             // Normalize the motor powers to keep them within range [-1, 1]
@@ -182,6 +169,7 @@ public class LimelightColorDetection extends OpMode {
                 telemetry.addData("Pipeline", "Red");
             }
             telemetry.update();
+        
         }
     }
 }

@@ -33,9 +33,7 @@ public class LimelightColorDetection extends OpMode {
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
-
         // Initialize the Limelight object
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // Set polling rate for Limelight
         limelight.start();
@@ -84,30 +82,30 @@ public class LimelightColorDetection extends OpMode {
             limelight.pipelineSwitch(activePipeline);
 
             LLResult result = limelight.getLatestResult();
-            double targetX = 0;
+            double targetY = 0;
             double targetArea = 0;
             boolean hasTarget = false;
 
             if (result != null && result.isValid()) {
-                targetX = result.getTx(); // Horizontal offset from target
-                if (targetX >= 0) {
-                    scale = targetX / 5;
+                targetY = result.getTy(); // Horizontal offset from target
+                if (targetY >= 0) {
+                    scale = targetY / 5;
                 } else {
-                    scale = targetX / -5;
+                    scale = targetY / -5;
                 }
                 targetArea = result.getTa(); // Area of the target (useful for distance)
                 hasTarget = true;
-                telemetry.addData("Target X", targetX);
+                telemetry.addData("Target X", targetY);
                 telemetry.addData("Target Area", targetArea);
             } else {
                 hasTarget = false;
             }
             if (gamepad1.dpad_right && hasTarget) {
-                telemetry.addData("Rotation without scale", -Range.clip(targetX / 150, -1.0, 1.0));
-                telemetry.addData("Rotation with scale", scale * -Range.clip(targetX / 150, -1.0, 1.0));
+                telemetry.addData("Rotation without scale", -Range.clip(targetY / 150, -1.0, 1.0));
+                telemetry.addData("Rotation with scale", scale * -Range.clip(targetY / 150, -1.0, 1.0));
                 telemetry.addData("Scale", scale);
 
-                rotate = scale * -Range.clip(targetX / 150, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
+                rotate = scale * -Range.clip(targetY / 150, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
                 if (targetArea < 1.25) {
                     if (targetArea < 0.4) {
                         drive = -1;
@@ -124,11 +122,11 @@ public class LimelightColorDetection extends OpMode {
                     }
                 }
             } else if (gamepad1.dpad_left && hasTarget) {
-                telemetry.addData("Rotation without scale", -Range.clip(targetX / 150, -1.0, 1.0));
-                telemetry.addData("Rotation with scale", scale * -Range.clip(targetX / 150, -1.0, 1.0));
+                telemetry.addData("Rotation without scale", -Range.clip(targetY / 150, -1.0, 1.0));
+                telemetry.addData("Rotation with scale", scale * -Range.clip(targetY / 150, -1.0, 1.0));
                 telemetry.addData("Scale", scale);
 
-                rotate = scale * -Range.clip(targetX / 150, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
+                rotate = scale * -Range.clip(targetY / 150, -1.0, 1.0); // Adjust rotation based on target's X-axis offset
                 if (targetArea < 1.25) {
                     if (targetArea < 0.4) {
                         drive = -1;

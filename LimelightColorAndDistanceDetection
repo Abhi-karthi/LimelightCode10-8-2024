@@ -55,7 +55,7 @@ public class LimelightColorDetection extends LinearOpMode {
         double frontLeftPower = drive + strafe + rotate;
         double frontRightPower = drive - strafe - rotate;
         double backLeftPower = drive - strafe + rotate;
-        double backRightPower = drive + strafe - rotate;
+        double backRightPower = drive + strafe - rotate;  
 
         while (opModeInInit()) {
             if (gamepad1.b) {
@@ -169,7 +169,7 @@ public class LimelightColorDetection extends LinearOpMode {
                 telemetry.addData("Pipeline", "Red");
             }
             telemetry.update();
-        
+
         }
     }
 }

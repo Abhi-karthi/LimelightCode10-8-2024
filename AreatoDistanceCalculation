@@ -1,0 +1,14 @@
+public double calculateDistanceFromArea(double area) {
+        if (area == 0) {
+            return Double.MAX_VALUE; // No target detected
+        }
+
+        // Calibration factor based on testing (tune this for your setup)
+        double calibrationFactor = 21.5; // Example, adjust this value
+
+        // Calculate the distance using the area, assuming inverse-square relationship
+        double distance = calibrationFactor / Math.sqrt(area);
+        distance = distance;
+
+        return distance; // Distance in inches
+    }

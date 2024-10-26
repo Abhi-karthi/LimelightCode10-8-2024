@@ -1,0 +1,60 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+@TeleOp(name = "Limelight Distance", group = "Linear OpMode")
+public class LimelightDistance extends LinearOpMode {
+
+    // Constants for distance calculation
+    private static final double cameraHeight = 8.0; // Height of Limelight camera in inches
+    private static final double targetHeight = 24.0; // Height of target in inches
+    private static final double cameraAngle = 20.0; // Angle of camera in degrees
+
+    @Override
+    public void runOpMode() {
+        // Initialization
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+
+        // Wait for start command from driver station
+        waitForStart();
+
+        while (opModeIsActive()) {
+            // Get the vertical angle to the target
+            double ty = getTy(); // Get ty angle from Limelight
+            double distance = calculateDistance(ty);
+
+            telemetry.addData("Distance to Closest Target (inches):", distance);
+            telemetry.update();
+        }
+    }
+
+    // Method to retrieve the vertical offset 'ty' from the Limelight
+    private double getTy() {
+        // Assuming your Limelight setup uses the NetworkTables or another method to get 'ty'
+        // Replace this placeholder with actual code to get 'ty' from Limelight's data stream
+        return getNetworkTableEntry("ty").getDouble(0.0); // Placeholder
+    }
+
+    // Distance calculation using vertical offset 'ty' (in degrees)
+    private double calculateDistance(double ty) {
+        // Convert ty and cameraAngle from degrees to radians for calculation
+        double tyRadians = Math.toRadians(ty);
+        double cameraAngleRadians = Math.toRadians(cameraAngle);
+
+        // Calculate distance using trigonometry
+        double distance = (targetHeight - cameraHeight) / Math.tan(cameraAngleRadians + tyRadians);
+        return distance;
+    }
+
+    // Example method to retrieve values from NetworkTables (assuming NetworkTables is set up)
+    private NetworkTableEntry getNetworkTableEntry(String key) {
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        return table.getEntry(key);
+    }
+}
+

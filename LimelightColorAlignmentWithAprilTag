@@ -111,7 +111,7 @@ public class LimelightColorDetection extends LinearOpMode {
                 } else {
                     activePipeline = 2; // Red
                 }
-            } else if (gamepad1.dpad_up) {
+            } else { // If the driver doesn't autoalign with game peice it will default to April tag
                 activePipeline = 3;
             }
             limelight.pipelineSwitch(activePipeline);
@@ -146,7 +146,7 @@ public class LimelightColorDetection extends LinearOpMode {
                 scale = targetY / -5;
             }
             // Use tag data
-            if ((gamepad1.dpad_right || gamepad1.dpad_left) && hasTarget) {
+            if ((gamepad1.dpad_right || gamepad1.dpad_left || gamepad1.dpad_up) && hasTarget) {
                 telemetry.addData("Rotation without scale", -Range.clip(targetY / 150, -1.0, 1.0));
                 telemetry.addData("Rotation with scale", scale * -Range.clip(targetY / 150, -1.0, 1.0));
                 telemetry.addData("Scale", scale);

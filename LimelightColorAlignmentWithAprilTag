@@ -3,13 +3,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.robotcore.util.Range;
 
 import java.util.List;
@@ -78,7 +76,8 @@ public class LimelightColorDetection extends LinearOpMode {
         double backLeftPower = drive - strafe + rotate;
         double backRightPower = drive + strafe - rotate;
         double distance = calculateDistanceFromArea(targetArea);
-        int id = -1;
+        int AprilTagId = -1;
+        double distanceFromAprilTagCentimeters = -1;
 
 
         while (opModeInInit()) {
@@ -122,7 +121,9 @@ public class LimelightColorDetection extends LinearOpMode {
             targetArea = 0;
             hasTarget = false;
 
-            id = -1;
+            AprilTagId = -1;
+            distanceFromAprilTagCentimeters = -1;
+            hasTarget = false;
 
             if (result != null && result.isValid()) {
                 targetY = result.getTy(); // Horizontal offset from target
@@ -133,12 +134,11 @@ public class LimelightColorDetection extends LinearOpMode {
                 if (activePipeline == 3) {
                     List<LLResultTypes.FiducialResult> tags = result.getFiducialResults();
                     for (LLResultTypes.FiducialResult tag : tags) {
-                        id = tag.getFiducialId();
+                        AprilTagId = tag.getFiducialId();
                         targetY = tag.getTargetYDegrees(); // Horizontal offset from target
+                        distanceFromAprilTagCentimeters = 100 * tag.getRobotPoseTargetSpace().getPosition().z;
                     }
                 }
-            } else {
-                hasTarget = false;
             }
             if (targetY >= 0) {
                 scale = targetY / 5;
@@ -184,7 +184,8 @@ public class LimelightColorDetection extends LinearOpMode {
             telemetry.addData("Back Left Power", backLeftPower);
             telemetry.addData("Back Right Power", backRightPower);
             telemetry.addData("Target", hasTarget);
-            telemetry.addData("April Tag ID", id);
+            telemetry.addData("April Tag ID", AprilTagId);
+            telemetry.addData("Distance April Tag", distanceFromAprilTagCentimeters);
             telemetry.addData("Status", "Running");
             if (activePipeline == 0) {
                 telemetry.addData("Pipeline", "Yellow");

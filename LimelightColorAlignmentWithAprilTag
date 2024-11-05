@@ -136,7 +136,8 @@ public class LimelightColorDetection extends LinearOpMode {
                     for (LLResultTypes.FiducialResult tag : tags) {
                         AprilTagId = tag.getFiducialId();
                         targetY = tag.getTargetYDegrees(); // Horizontal offset from target
-                        distanceFromAprilTagCentimeters = 100 * tag.getRobotPoseTargetSpace().getPosition().z;
+                        // Using pythagorean theorem to solve for distance.
+                        distanceFromAprilTagCentimeters = 100 * Math.sqrt((tag.getRobotPoseTargetSpace().getPosition().z * tag.getRobotPoseTargetSpace().getPosition().z) + (tag.getRobotPoseTargetSpace().getPosition().x * tag.getRobotPoseTargetSpace().getPosition().x));
                     }
                 }
             }

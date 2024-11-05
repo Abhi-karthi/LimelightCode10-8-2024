@@ -25,7 +25,7 @@ public class LimelightColorDetection extends LinearOpMode {
 
     public double calculateDistanceFromArea(double area) {
         if (area == 0) {
-            return Double.MAX_VALUE; // No target detected
+            return -1; // No target detected
         }
 
         // Calibration factor based on testing (tune this for your setup)
